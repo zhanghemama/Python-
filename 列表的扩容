@@ -1,0 +1,55 @@
+原文参考https://www.cnblogs.com/fendou-999/p/3535194.html
+列表对象的长度是可变的，因此不能采用字符串那样的结构体，而是使用了一个指针字段items指向可变长度的数组，而这个数组本身是一个指向PyObject的指针。
+allocated字段表示这个指针数组的长度，而size字段表示指针数组中已经使用的元素个数，即列表的长度。列表结构体本身的大小是固定的。
+
+class PyVarObject(PyObject):
+    _fields_ = [("size", c_size_t)]
+    
+class PyList(PyVarObject):
+    _fields_ = [("items", POINTER(POINTER(PyObject))),
+                ("allocated", c_size_t)]
+
+    def print_field(self):
+        print self.size, self.allocated, byref(self.items[0])
+        
+我们用下面的程序查看往列表中添加元素时，列表结构体中的各个字段的变化：
+
+def test_list():
+    alist = [1,2.3,"abc"]
+    alist_obj = PyList.from_address(id(alist))
+
+    for x in xrange(10):
+        alist_obj.print_field()
+        alist.append(x)
+运行test_list()得到下面的结果：
+
+>>> test_list()
+3 3 <cparam 'P' (02B0ACE8)>  ❶
+4 7 <cparam 'P' (028975A8)>  ❷
+5 7 <cparam 'P' (028975A8)>
+6 7 <cparam 'P' (028975A8)>
+7 7 <cparam 'P' (028975A8)>
+8 12 <cparam 'P' (02AAB838)>
+9 12 <cparam 'P' (02AAB838)>
+10 12 <cparam 'P' (02AAB838)>
+11 12 <cparam 'P' (02AAB838)>
+12 12 <cparam 'P' (02AAB838)>
+
+
+❶一开始列表的长度和其指针数组的长度都是3，即列表处于饱和状态。因此❷往列表中添加新元素时，需要重新分配指针数组，因此指针数组的长度变为了7，而地址也发生了变化。这时列表的长度为4，因此指针数组中还有3个空位保存新的元素。由于每次重新分配指针数组时，都会预分配一些额外空间，因此往列表中添加元素的平均时间复杂度为O(1)。
+
+下面再看看从列表删除元素时，各个字段的变化：
+
+def test_list2():
+    alist = [1] * 10000
+    alist_obj = PyList.from_address(id(alist))
+
+    alist_obj.print_field()
+    del alist[10:]
+    alist_obj.print_field()
+运行test_list2()得到下面的结果：
+
+>>> test_list2()
+10000 10000 <cparam 'P' (034E5AB8)>
+10 17 <cparam 'P' (034E5AB8)>
+可以看出大指针数组的位置没有发生变化，但是后面额外的空间被回收了。
