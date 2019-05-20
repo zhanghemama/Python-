@@ -1,0 +1,46 @@
+python中字符串是不能改变的，下面的代码会报错，
+s = 'hello'
+s[0] = 'H'
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'str' object does not support item assignment
+
+要想改变字符串，有两种方法，
+s = 'H' + s[1:]
+s = s.replace('h', 'H')
+第一种方法是用大写字母'H'，通过'+'操作符，与原字符串切片操作的子字符串拼接成新的字符串。
+第二种方法是直接扫描原字符串，把'h'替换成'H'
+这样每次改变字符串都需要O(n)的复杂度。
+
+使用加法操作符'+='的字符串拼接方法，打破了字符串不能改变的特性。
+s = ''
+for n in range(0, 100000):
+    s += str(n)
+
+这个操作在python2.5以前具有O(n^2)的复杂度，但是python2.5之后，每次处理str += str1，python会检查str，还有没有
+其他的引用，如果没有就会尝试扩充str，而不是重新创建一片内存来并拷贝。这样上述例子的复杂度就变成O(n)了。
+
+对于字符串的拼接还可以采用join函数，
+l = []
+for n in range(0, 100000):
+    l.append(str(n))
+l = ' '.join(l) 
+
+那么下面三种字符串拼接，哪种效率更好呢？
+1.
+s = ''
+for n in range(0, 100000):
+    s += str(n)
+
+2.
+l = []
+for n in range(0, 100000):
+    l.append(str(n))
+    
+s = ' '.join(l)
+
+3.
+s = " ".join(map(str, range(0, 100000)))
+
+测试结果是3-->2-->1
+
