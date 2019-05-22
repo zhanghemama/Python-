@@ -1,0 +1,80 @@
+#python中最简单的输入来自键盘操作，
+name = input('your name:')
+gender = input('you are a boy?(y/n)')
+
+###### 输入 ######
+your name:Jack
+you are a boy?
+
+input函数暂停程序运行同时等待键盘输入，直到回车被按下，输入的类型永远是str。
+a = input()
+1
+b = input()
+2
+
+print('a + b = {}'.format(a + b))
+########## 输出 ##############
+a + b = 12
+print('type of a is {}, type of b is {}'.format(type(a), type(b)))
+########## 输出 ##############
+type of a is <class 'str'>, type of b is <class 'str'>
+print('a + b = {}'.format(int(a) + int(b)))
+########## 输出 ##############
+a + b = 3
+
+#open是打开函数，要和close配对调用，但是如果是在with语句中调用open，语句执行完后会自动调用close，代码会简洁很多。
+
+#JSON是一种轻量级的数据交换格式，它的设计意图是把所有的事情都用字符串表示，这样即方便在互联网中交换信息，也方便人阅读。
+现在我们完成下面的任务，把字典信息转化成JSON，然后再把JSON转化回字典类型：
+import json
+
+params = {
+    'symbol': '123456',
+    'type': 'limit',
+    'price': 123.4,
+    'amount': 23
+}
+
+params_str = json.dumps(params)
+
+print('after json serialization')
+print(f"type of params_str = {type(params_str)}, params_str = {params}")
+
+original_params = json.loads(params_str)
+
+print('after json deserialization')
+print('type of original_params = {type(original_params)}, original_params = {original_params}')
+
+########## 输出 ##########
+
+after json serialization
+type of params_str = <class 'str'>, params_str = {'symbol': '123456', 'type': 'limit', 'price': 123.4, 'amount': 23}
+after json deserialization
+type of original_params = <class 'dict'>, original_params = {'symbol': '123456', 'type': 'limit', 'price': 123.4, 'amount': 23}
+
+
+#JSON也可以从文件中read，write
+import json
+
+params = {
+    'symbol': '123456',
+    'type': 'limit',
+    'price': 123.4,
+    'amount': 23
+}
+
+with open('params.json', 'w') as fout:
+    params_str = json.dump(params, fout)
+
+with open('params.json', 'r') as fin:
+    original_params = json.load(fin)
+
+print('after json deserialization')
+print(f'type of original_params = {type(original_params)}, original_params = {original_params}')
+
+########## 输出 ##########
+
+after json deserialization
+type of original_params = <class 'dict'>, original_params = {'symbol': '123456', 'type': 'limit', 'price': 123.4, 'amount': 23}
+
+#I/O操作要进行充分的错误处理，细心编码，防止编码漏洞。
