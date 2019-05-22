@@ -5,14 +5,14 @@ Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 TypeError: 'str' object does not support item assignment
 
-要想改变字符串，有两种方法，
+#要想改变字符串，有两种方法，
 s = 'H' + s[1:]
 s = s.replace('h', 'H')
 第一种方法是用大写字母'H'，通过'+'操作符，与原字符串切片操作的子字符串拼接成新的字符串。
 第二种方法是直接扫描原字符串，把'h'替换成'H'
 这样每次改变字符串都需要O(n)的复杂度。
 
-使用加法操作符'+='的字符串拼接方法，打破了字符串不能改变的特性。
+#使用加法操作符'+='的字符串拼接方法，打破了字符串不能改变的特性。
 s = ''
 for n in range(0, 100000):
     s += str(n)
@@ -20,13 +20,13 @@ for n in range(0, 100000):
 这个操作在python2.5以前具有O(n^2)的复杂度，但是python2.5之后，每次处理str += str1，python会检查str，还有没有
 其他的引用，如果没有就会尝试扩充str，而不是重新创建一片内存来并拷贝。这样上述例子的复杂度就变成O(n)了。
 
-对于字符串的拼接还可以采用join函数，
+#对于字符串的拼接还可以采用join函数，
 l = []
 for n in range(0, 100000):
     l.append(str(n))
 l = ' '.join(l) 
 
-那么下面三种字符串拼接，哪种效率更好呢？
+#那么下面三种字符串拼接，哪种效率更好呢？
 1.
 s = ''
 for n in range(0, 100000):
@@ -44,3 +44,13 @@ s = " ".join(map(str, range(0, 100000)))
 
 测试结果是3-->2-->1
 
+#字符串的format三种方式
+1.
+print('no data available for person with id: %s, name: %s' % (id, name))
+2.
+print('no data available for person with id: {}, name: {}'.format(id, name))
+3.
+name = "Eric"
+age = 74
+f"Hello, {name}. You are {age}."
+F"Hello, {name}. You are {age}."
