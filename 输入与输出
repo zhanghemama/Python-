@@ -1,3 +1,4 @@
+极客时间学习笔记之输入与输出，
 #python中最简单的输入来自键盘操作，
 name = input('your name:')
 gender = input('you are a boy?(y/n)')
