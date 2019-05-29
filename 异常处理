@@ -1,0 +1,14 @@
+极客时间学习笔记之异常处理，
+
+异常指的是程序运行时遇见错误而终止，用try catch做异常处理，这样程序不会被终止，可以正常运行。
+处理异常的时候如果有必须要执行的语句，如关闭文件可以放在final中。
+异常处理是你不确定某段代码是否能成功执行，如数据库的连接，查询，正常的flow，像if语句不需要异常
+处理。
+
+#
+下面是异常处理的代码例子，
+try:
+    db = DB.connect('<db path>') # 可能会抛出异常
+    raw_data = DB.queryData('<viewer_id>') # 可能会抛出异常
+except (DBConnectionError, DBQueryDataError) err:
+    print('Error: {}'.format(err))
