@@ -1,0 +1,109 @@
+极客时间学习笔记之条件与循环，
+#python中条件语句不能加括号，末尾必须加分号:
+
+下面这样的语句是❌的，
+if (x < 0)
+
+正确的应该为，
+# y = |x|
+if x < 0:
+    y = -x
+else:
+    y = x
+
+#python中不支持switch，python中else if用elif表示； if语句可以单独使用，elif和else必须和if一起使用。
+
+#python中只要可以迭代的，都可以用下面的方式来遍历，
+for item in <iterable>:
+    ...
+
+对于字典，只有key是可以迭代的，要向遍历的它的value或者键值对，需要通过values或者items来实现。values
+返回字典中值的集合，items返回字典中键值对的集合；
+
+d = {'name': 'jason', 'dob': '2000-01-01', 'gender': 'male'}
+for k in d: # 遍历字典的键
+    print(k)
+name
+dob
+gender
+
+for v in d.values(): # 遍历字典的值
+    print(v)
+jason
+2000-01-01
+male    
+
+for k, v in d.items(): # 遍历字典的键值对
+    print('key: {}, value: {}'.format(k, v))
+key: name, value: jason
+key: dob, value: 2000-01-01
+key: gender, value: male 
+
+#通过索引来遍历集合中的元素
+l = [1, 2, 3, 4, 5, 6, 7]
+for index in range(0, len(l)):
+    if index < 5:
+        print(l[index])        
+        
+1
+2
+3
+4
+5
+
+当同时需要索引和元素的时候，可以用enumerate，用它来遍历元素，不仅可以返回每个元素，还可以返回对应的索引；
+l = [1, 2, 3, 4, 5, 6, 7]
+for index, item in enumerate(l):
+    if index < 5:
+        print(item)  
+              
+1
+2
+3
+4
+5
+
+#for和while， 很多时候它们可以互换，如果是遍历一个已知的集合，找出满足条件的元素，并进行相应的操作，那么
+用for更简洁。如果是满足条件前需要一直做某件事情，没有特定的集合去遍历，则用while更合适。如下的交互输入系
+统，
+while True:
+    try:
+        text = input('Please enter your questions, enter "q" to exit')
+        if text == 'q':
+            print('Exit system')
+            break
+        ...
+        ...
+        print(response)
+    except as err:
+        print('Encountered error: {}'.format(err))
+        break 
+
+#for, while的循环效率，
+1.
+i = 0
+while i < 1000000
+    i += 1
+
+2.
+for i in range(0, 1000000):
+    pass
+
+range是用c语言实现的，调用它速度非常快。while循环中的‘+=’通过python的解释器调用C语言，并且这个简单的操作涉及到对象
+的创建和删除，i是immutable的， i += 1，等价于 i = new int(i+1), 所以显然for循环效率更高。
+
+
+#条件与循环并做一行的写法
+expression1 if condition else expression2 for item in iterable
+
+y = [value * 2 + 5 if value > 0 else -value * 2 + 5 for value in x]
+
+expression for item in iterable if condition
+
+text = ' Today,  is, Sunday'
+text_list = [s.strip() for s in text.split(',') if len(s.strip()) > 3]
+print(text_list)
+['Today', 'Sunday']
+
+[(xx, yy) for xx in x for yy in y if xx != yy]
+

@@ -1,0 +1,104 @@
+极客时间学习笔记之自定义函数，
+
+#
+自定义函数形式如下，
+def name(param1, param2, ..., paramN):
+    statements
+    return/yield value # optional
+
+#
+python函数可以设置默认参数值，
+def func(param = 0):
+    ...
+
+#定义顺序
+
+在主程序中调用必须保证函数之前就定义过，函数间调用哪个声明在前，哪个声明在后无所谓，只要有定义就好。
+
+#函数参数，
+
+python中函数参数可以接受任何类型，输入的时候不用考虑参数类型，而是将其交具体的代码去判断执行。
+这种行为叫做多态。这种便利性在实际应用中可能会带来问题，必要时可以在开头做类型检查。
+
+
+#函数嵌套，如下例，
+def f1():
+    print('hello')
+    def f2():
+        print('world')
+    f2()
+f1()
+
+# 输出
+hello
+world
+
+函数嵌套的作用，保证内部函数的隐私，内部函数只会被外部函数访问，不会暴露在全局作用域内，如果你
+函数内部有一些隐私，不想暴露在外面可以用嵌套函数封装起来，如数据库的用户和密码。
+函数嵌套的另外一个作用是提高效率，如下例，
+def factorial(input):
+    # validation check
+    if not isinstance(input, int):
+        raise Exception('input must be an integer.')
+    if input < 0:
+        raise Exception('input must be greater or equal to 0' )
+    ...
+
+    def inner_factorial(input):
+        if input <= 1:
+            return 1
+        return input * inner_factorial(input-1)
+    return inner_factorial(input)
+
+
+print(factorial(5))
+
+上面函数是计算一个数的阶乘，计算部分用嵌套函数封装起来，这样类型检查的代码只需要在开头做一次，
+而不是每次递归都需要计算，提高了效率。
+
+#函数的作用域，
+函数内部定义的变量是局部变量，出了函数就被回收；
+整个文件层次上的叫做全局变量，可以在文件任意地方被访问到；在函数内部不能随意改变全局变量的
+值，除非加上global；函数内部如果重新定义了之前定义过的全局变量，那会覆盖全局变量；
+对于嵌套函数，内部函数可以访问外部函数定义的变量，但是不能修改，除非加上nonlocal；
+
+
+#闭包
+闭包和刚刚讲到的嵌套类似，但是外部函数返回的是一个函数，而不是一个值，返回的函数通常被赋予一个
+变量，这样在后面还可以继续用；
+def nth_power(exponent):
+    def exponent_of(base):
+        return base ** exponent
+    return exponent_of # 返回值是 exponent_of 函数
+
+square = nth_power(2) # 计算一个数的平方
+cube = nth_power(3) # 计算一个数的立方 
+square
+# 输出
+<function __main__.nth_power.<locals>.exponent(base)>
+
+cube
+# 输出
+<function __main__.nth_power.<locals>.exponent(base)>
+
+print(square(2))  # 计算 2 的平方
+print(cube(2)) # 计算 2 的立方
+# 输出
+4 # 2^2
+8 # 2^3
+
+使用闭包可以让程序变得更简洁，比如有很多幂的计算，
+# 不适用闭包
+res1 = nth_power_rewrite(base1, 2)
+res2 = nth_power_rewrite(base2, 2)
+res3 = nth_power_rewrite(base3, 2)
+...
+
+# 使用闭包
+square = nth_power(2)
+res1 = square(base1)
+res2 = square(base2)
+res3 = square(base3)
+...
+
+显然使用闭包更简洁；和前面嵌套函数类似，正确使用闭包可以提升程序运行效率；
