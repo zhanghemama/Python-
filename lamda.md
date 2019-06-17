@@ -16,14 +16,14 @@ square(3)
 1.lamda 是一个表达式，并不是语句，所以它可以用在一些常规函数不能用的地方，比如用在
 列表内部，
 [(lambda x: x*x)(x) for x in range(10)]
-# 输出
+#
 [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
 
 还可以作为某些函数的参数，而常规函数不能
 l = [(1, 20), (3, 0), (9, 10), (2, -1)]
 l.sort(key=lambda x: x[1]) # 按列表中元祖的第二个元素排序
 print(l)
-# 输出
+# 
 [(2, -1), (3, 0), (9, 10), (1, 20)]
 
 常规函数必须通过函数名被调用，因此它首先需要被定义，但是作为一个表达式的lamda则不需要名字
@@ -41,15 +41,16 @@ squared = map(lambda x: x**2, [1, 2, 3, 4, 5])
 函数式编程指的是代码中的每一块儿都是不可变得，都由纯函数的形式组成，这里的纯函数，指的是函数本身相互独立，互不影响，对于相同的输入总是有相同的输出，没有任何副作用
 举个例子，
 def multiply_2(l):
-for index in range(0, len(l)):
-l[index] *= 2
+    for index in range(0, len(l)):
+    l[index] *= 2
 return l
 
 这个函数改变了输入参数的值，有副作用，多次调用每次返回的结果都不一样，如果把它变成一个纯函数的形式，如下，
-def multiply_2(l):
-for index in range(0, len(l)):
-l[index] *= 2
-return l
+def multiply_2_pure(l):
+    new_list = []
+    for item in l:
+        new_list.append(item * 2)
+    return new_list
 
 函数编程的优点是其纯函数和不可变的特性使得程序更加健壮，易于调试和测试，缺点是限制多，难写。python不同于scala，
 它不是一门函数式编程语言，但是它提供了一些函数式编程的特性，像map，filter，reduce；
