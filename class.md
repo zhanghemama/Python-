@@ -12,27 +12,25 @@
 看下面代码，定义了一个类
 class Document():
 
-WELCOME_STR = 'Welcome! The context for this book is {}.'
+        WELCOME_STR = 'Welcome! The context for this book is {}.'
 
-def __init__(self, title, author, context):
-print('init function called')
-self.title = title
-self.author = author
-self.__context = context
+        def __init__(self, title, author, context):
+            print('init function called')
+            self.title = title
+            self.author = author
+            self.__context = context
 
-# 类函数
-@classmethod
-def create_empty_book(cls, title, author):
-return cls(title=title, author=author, context='nothing')
 
-# 成员函数
-def get_context_length(self):
-return len(self.__context)
+        @classmethod
+        def create_empty_book(cls, title, author):
+            return cls(title=title, author=author, context='nothing')
 
-# 静态函数
-@staticmethod
-def get_welcome(context):
-return Document.WELCOME_STR.format(context)
+        def get_context_length(self):
+            return len(self.__context)
+
+        @staticmethod
+        def get_welcome(context):
+            return Document.WELCOME_STR.format(context)
 
 
 empty_book = Document.create_empty_book('What Every Man Thinks About Apart from Sex', 'Professor Sheridan Simove')
@@ -56,20 +54,20 @@ Welcome! The context for this book is indeed nothing.
 from abc import ABCMeta, abstractmethod
 
 class Entity(metaclass=ABCMeta):
-@abstractmethod
-def get_title(self):
-pass
+        @abstractmethod
+        def get_title(self):
+                pass
 
-@abstractmethod
-def set_title(self, title):
-pass
+      @abstractmethod
+      def set_title(self, title):
+          pass
 
 class Document(Entity):
-def get_title(self):
-return self.title
+        def get_title(self):
+            return self.title
 
-def set_title(self, title):
-self.title = title
+      def set_title(self, title):
+        self.title = title
 
 document = Document()
 document.set_title('Harry Potter')
